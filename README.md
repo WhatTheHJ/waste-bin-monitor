@@ -11,4 +11,5 @@
 
 쓰레기통마다 측정 노드가 하나씩 붙고, 세 노드가 각자의 HC-06으로 라즈베리파이에 값을 보냅니다. 판단·저장·표시·알림은 모두 서버가 맡습니다.
 
-!image.png
+<img width="661" height="269" alt="image" src="https://github.com/user-attachments/assets/42f9cbfd-4e09-4f5a-9369-3fa346cd745b" />
+

@@ -12,9 +12,29 @@
 | D7 | A통 HC-SR04 Trig | 출력 | `TRIG_A` |
 | D8 | ESP-01 어댑터 TX | 소프트웨어 시리얼 RX (38400bps) | `WIFI_RX` |
 | D9 | ESP-01 어댑터 RX | 소프트웨어 시리얼 TX (38400bps) | `WIFI_TX` |
+| A0 | A통 RGB LED R | 출력 | `LED_A_R` |
+| A1 | A통 RGB LED G | 출력 | `LED_A_G` |
+| A2 | B통 RGB LED R | 출력 | `LED_B_R` |
+| A3 | B통 RGB LED G | 출력 | `LED_B_G` |
+| A4 | C통 RGB LED R | 출력 | `LED_C_R` |
+| A5 | C통 RGB LED G | 출력 | `LED_C_G` |
 | 5V | ESP-01 어댑터 VCC, HC-SR04 ×3 VCC | - | - |
-| GND | ESP-01 어댑터 GND, HC-SR04 ×3 GND | - | - |
+| GND | ESP-01 어댑터 GND, HC-SR04 ×3 GND, RGB LED ×3 공통 다리 | - | - |
 | D0, D1 | 비워 둠 (USB 시리얼 모니터, 9600bps) | - | - |
+| D10 ~ D13 | 비어 있음 | - | - |
+
+### RGB LED (통마다 1개, R·G만 연결)
+
+- R, G 다리마다 220Ω 저항을 하나씩 직렬로 연결합니다. B 다리는 연결하지 않습니다.
+- 공통 다리는 캐소드 공통이면 GND, 애노드 공통이면 5V에 연결하고 코드의 `LED_COMMON_ANODE`를 1로 바꿉니다.
+
+| 적재량 | 색 | 켜는 핀 |
+| --- | --- | --- |
+| 0 ~ 40% | 초록 | G |
+| 41 ~ 75% | 노랑 | R + G |
+| 76 ~ 90% | 빨강 | R |
+| 91 ~ 100% | 빨강 깜빡임 (0.3초 간격) | R |
+| 센서값 없음 | 꺼짐 | - |
 
 ## STM32 핀 연결
 

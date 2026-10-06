@@ -1,33 +1,80 @@
-## 핀 할당
+## UNO 핀 연결 표
 
-| 칩 핀 | 보드 표기 | 연결 대상 | 핀 기능 | GPIO mode | Pull | 초기 출력 | 속도 | User Label |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| PA0 | A0 | A통 HC-SR04 Trig | GPIO_Output | Output Push Pull | No pull | Low | Low | TRIG_A |
-| PA1 | A1 | B통 HC-SR04 Trig | GPIO_Output | Output Push Pull | No pull | Low | Low | TRIG_B |
-| PA4 | A2 | C통 HC-SR04 Trig | GPIO_Output | Output Push Pull | No pull | Low | Low | TRIG_C |
-| PB10 | D6 | A통 HC-SR04 Echo | GPIO_Input | Input mode | No pull | - | - | ECHO_A |
-| PC7 | D9 | B통 HC-SR04 Echo | GPIO_Input | Input mode | No pull | - | - | ECHO_B |
-| PB6 | D10 | C통 HC-SR04 Echo | GPIO_Input | Input mode | No pull | - | - | ECHO_C |
-| PA9 | D8 | HC-06 RXD | USART1_TX | Alternate Function Push Pull | No pull | - | Very High | - |
-| PA10 | D2 | HC-06 TXD | USART1_RX | Alternate Function Push Pull | Pull-up | - | Very High | - |
+아두이노 코드(코드 담당자 제공) 기준입니다.
 
-
-## 모듈별 배선 요약
-
-### HC-SR04 (×3)
-
-| HC-SR04 핀 | A통 | B통 | C통 |
+| UNO 핀 | 연결 대상 | 아두이노에서 설정 | 코드 이름 |
 | --- | --- | --- | --- |
-| VCC | 5V | 5V | 5V |
-| Trig | A0 (PA0) | A1 (PA1) | A2 (PA4) |
-| Echo | D6 (PB10) | D9 (PC7) | D10 (PB6) |
-| GND | GND | GND | GND |
+| D2 | C통 HC-SR04 Echo | 입력 | `ECHO_C` |
+| D3 | C통 HC-SR04 Trig | 출력 | `TRIG_C` |
+| D4 | B통 HC-SR04 Echo | 입력 | `ECHO_B` |
+| D5 | B통 HC-SR04 Trig | 출력 | `TRIG_B` |
+| D6 | A통 HC-SR04 Echo | 입력 | `ECHO_A` |
+| D7 | A통 HC-SR04 Trig | 출력 | `TRIG_A` |
+| D8 | ESP-01 어댑터 TX | 소프트웨어 시리얼 RX (38400bps) | `WIFI_RX` |
+| D9 | ESP-01 어댑터 RX | 소프트웨어 시리얼 TX (38400bps) | `WIFI_TX` |
+| 5V | ESP-01 어댑터 VCC, HC-SR04 ×3 VCC | - | - |
+| GND | ESP-01 어댑터 GND, HC-SR04 ×3 GND | - | - |
+| D0, D1 | 비워 둠 (USB 시리얼 모니터, 9600bps) | - | - |
 
-### HC-06 (×1)
+## STM32 핀 연결
 
-| HC-06 핀 | 연결 |
-| --- | --- |
-| VCC | 5V |
-| GND | GND |
-| TXD | D2 (PA10, USART1_RX) |
-| RXD | D8 (PA9, USART1_TX) |
+### STM32 → 74HC595 제어선
+
+| NUCLEO 핀 | 칩 핀 | 연결 대상 | 코드 이름 |
+| --- | --- | --- | --- |
+| D11 | PA7 | 595 #1 14번 (DS) | `DM_DATA` |
+| D12 | PA6 | 595 #1, #2 11번 (SH_CP) | `DM_CLK` |
+| D10 | PB6 | 595 #1, #2 12번 (ST_CP) | `DM_LATCH` |
+| 3.3V | - | 595 #1, #2 16번 (VCC), 10번 (MR) | - |
+| GND | - | 595 #1, #2 8번 (GND), 13번 (OE) | - |
+
+> MR(10번)은 반드시 3.3V에 연결해야 합니다. 떠 있으면 시프트레지스터가 계속 지워져 매트릭스가 전혀 켜지지 않습니다.
+
+### 시프트레지스터 1 (열 담당)
+
+위치는 칩의 홈(반달 모양)을 왼쪽에 두고 본 기준입니다.
+
+| 핀 | 위치 | 기능 | 연결 |
+| --- | --- | --- | --- |
+| 1 | 아랫줄 1번째 | Q1 | 330Ω 저항 → 매트릭스 3번 핀 (C2) |
+| 2 | 아랫줄 2번째 | Q2 | 330Ω 저항 → 매트릭스 4번 핀 (C3) |
+| 3 | 아랫줄 3번째 | Q3 | 330Ω 저항 → 매트릭스 10번 핀 (C4) |
+| 4 | 아랫줄 4번째 | Q4 | 330Ω 저항 → 매트릭스 6번 핀 (C5) |
+| 5 | 아랫줄 5번째 | Q5 | 330Ω 저항 → 매트릭스 11번 핀 (C6) |
+| 6 | 아랫줄 6번째 | Q6 | 330Ω 저항 → 매트릭스 15번 핀 (C7) |
+| 7 | 아랫줄 7번째 | Q7 | 330Ω 저항 → 매트릭스 16번 핀 (C8) |
+| 8 | 아랫줄 8번째 (오른쪽 끝) | GND | GND |
+| 9 | 윗줄 오른쪽 끝 | Q7' | 시프트레지스터 2의 14번 |
+| 10 | 윗줄 오른쪽 2번째 | MR | 3.3V |
+| 11 | 윗줄 오른쪽 3번째 | SH_CP | STM32 D12 |
+| 12 | 윗줄 오른쪽 4번째 | ST_CP | STM32 D10 |
+| 13 | 윗줄 오른쪽 5번째 | OE | GND |
+| 14 | 윗줄 오른쪽 6번째 | DS | STM32 D11 |
+| 15 | 윗줄 오른쪽 7번째 | Q0 | 330Ω 저항 → 매트릭스 13번 핀 (C1) |
+| 16 | 윗줄 왼쪽 끝 | VCC | 3.3V |
+
+### 시프트레지스터 2 (행 담당)
+
+| 핀 | 위치 | 기능 | 연결 |
+| --- | --- | --- | --- |
+| 1 | 아랫줄 1번째 | Q1 | 매트릭스 14번 핀 (R2) |
+| 2 | 아랫줄 2번째 | Q2 | 매트릭스 8번 핀 (R3) |
+| 3 | 아랫줄 3번째 | Q3 | 매트릭스 12번 핀 (R4) |
+| 4 | 아랫줄 4번째 | Q4 | 매트릭스 1번 핀 (R5) |
+| 5 | 아랫줄 5번째 | Q5 | 매트릭스 7번 핀 (R6) |
+| 6 | 아랫줄 6번째 | Q6 | 매트릭스 2번 핀 (R7) |
+| 7 | 아랫줄 7번째 | Q7 | 매트릭스 5번 핀 (R8) |
+| 8 | 아랫줄 8번째 (오른쪽 끝) | GND | GND |
+| 9 | 윗줄 오른쪽 끝 | Q7' | 연결 안 함 (`dot_test.c` 자가진단 모드 4에서만 STM32 D7에 연결) |
+| 10 | 윗줄 오른쪽 2번째 | MR | 3.3V |
+| 11 | 윗줄 오른쪽 3번째 | SH_CP | STM32 D12 (칩 1의 11번과 같은 줄) |
+| 12 | 윗줄 오른쪽 4번째 | ST_CP | STM32 D10 (칩 1의 12번과 같은 줄) |
+| 13 | 윗줄 오른쪽 5번째 | OE | GND |
+| 14 | 윗줄 오른쪽 6번째 | DS | 시프트레지스터 1의 9번 |
+| 15 | 윗줄 오른쪽 7번째 | Q0 | 매트릭스 9번 핀 (R1) |
+| 16 | 윗줄 왼쪽 끝 | VCC | 3.3V |
+
+### 8x8 도트매트릭스 (1088AS)
+
+- 행(R1~R8)은 High, 열(C1~C8)은 Low일 때 켜집니다. 코드 설정은 `DM_ROW_ACTIVE_HIGH 1`, `DM_COL_ACTIVE_LOW 1`입니다.
+- **꽂는 방향 주의**: 옆면에 글자가 인쇄된 쪽(또는 모서리가 깎인 쪽)의 왼쪽 끝이 1번 핀입니다. 180° 돌려 꽂으면 1~8번과 9~16번 핀이 서로 바뀌어 이상한 무늬가 나옵니다.

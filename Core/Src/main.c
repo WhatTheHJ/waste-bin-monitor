@@ -21,6 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "dot_map.h"
+#include "buzzer.h"
 
 /* USER CODE END Includes */
 
@@ -93,6 +95,8 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  DM_Map_Init();
+  Buzzer_Init();
 
   /* USER CODE END 2 */
 
@@ -103,6 +107,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    DM_Map_Loop();
+    Buzzer_Loop();
   }
   /* USER CODE END 3 */
 }

@@ -1,0 +1,35 @@
+{
+  "camera": 0,
+  "width": 640,
+  "height": 480,
+  "fps": 10,
+  "poll_seconds": 2,
+  "save_seconds": 2,
+  "threshold": 75,
+  "output_dir": "/var/www/html/webcam/route",
+  "draw_grid": false,
+  "db": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "user": "iot",
+    "password": "CHANGE_ME",
+    "database": "iotdb"
+  },
+  "bins": {
+    "A": [2, 6],
+    "B": [4, 2],
+    "C": [6, 5]
+  },
+  "road": [
+    "..#.....",
+    "..#.....",
+    "..#.....",
+    "..#.....",
+    "..#.....",
+    "..#.....",
+    "..######",
+    "........"
+  ],
+  "depot": null,
+  "corners": null
+}
